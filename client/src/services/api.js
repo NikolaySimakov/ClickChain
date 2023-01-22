@@ -1,5 +1,4 @@
 import axios from "axios";
-import VueAxios from "vue-axios";
 
 class ApiService {
 
