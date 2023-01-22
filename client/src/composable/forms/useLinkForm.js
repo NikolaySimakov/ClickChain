@@ -1,9 +1,10 @@
 import { ref, reactive, watch } from 'vue';
-import { useStore } from "vuex";
+import { useLinkStore } from '../../stores/links';
+
 
 export default function useLinkForm(link) {
 
-    const store = useStore();
+    const store = useLinkStore();
 
     const buttonSettings = reactive({
         message: 'Shorten',
@@ -39,7 +40,7 @@ export default function useLinkForm(link) {
         }
 
         // link copy available / unavailable
-        if (!!store.getters.getShortLink && link.value === store.getters.getShortLink) {
+        if (!!store.getShortLink && link.value === store.getShortLink) {
             buttonSettings.message = 'Copy';
             buttonSettings.style = 'bg-emerald-300 text-black';
             buttonSettings.onClick = copyShortLink;
@@ -51,14 +52,14 @@ export default function useLinkForm(link) {
         buttonSettings.style = 'bg-neutral-400 text-white';
         buttonSettings.onClick = null;
 
-        if (link.value !== store.getters.getShortLink) {
+        if (link.value !== store.getShortLink) {
             inputStyle.value = '';
         }
     }
 
     const getShortLink = () => {
-        store.dispatch("generateShortLink", link.value).then(() => {
-            link.value = store.getters.getShortLink;
+        store.generateShortLink(link.value).then(() => {
+            link.value = store.getShortLink;
             inputStyle.value = 'font-bold';
         });
     }
