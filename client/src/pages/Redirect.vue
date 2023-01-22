@@ -1,9 +1,9 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { ref, computed, onMounted } from "vue";
-import { useStore } from "vuex";
+import { useRedirectStore } from "../stores/redirect";
 
-const store = useStore();
+const store = useRedirectStore();
 const route = useRoute();
 
 const path = computed(() => route.path);
@@ -14,9 +14,9 @@ onMounted(async () => {
   const token = path.value.slice(1);
 
   store
-    .dispatch("getLongLink", token)
+    .getLongLink(token)
     .then(() => {
-      window.location.href = store.getters.longLink;
+      window.location.href = store.longLink;
     })
     .catch(() => {
       linkNotFound.value = true;
