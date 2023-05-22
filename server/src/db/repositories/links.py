@@ -3,6 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import delete
 
 from schemas import LinkBase, LongLink, ClicksBase
 from db.models import Link, Clicks
@@ -72,12 +73,12 @@ async def delete_link(session: AsyncSession, token: str):
 
 
 async def delete_links(session: AsyncSession):
-
-    try:
-        await session.query(Link).delete()
-        await session.commit()
-    except:
-        pass
+    links = delete(Link)
+    clicks = delete(Clicks)
+    await session.execute(clicks)
+    await session.execute(links)
+    await session.commit()
+    return {"message": "All users have been deleted."}
 
 
 """
