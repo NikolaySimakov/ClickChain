@@ -11,8 +11,8 @@ from resources import strings, constants
 router = APIRouter()
 
 
-@router.get('/', response_model=str)
-async def get_long_link(
+@router.get('/', response_model=str, name="Original URL", description="Returns original link by token.")
+async def get_link(
     token: str | None = None,
     db: AsyncSession = Depends(get_session),
 ):
@@ -27,7 +27,7 @@ async def get_long_link(
         return link.long_link
 
 
-@router.get('/all')
+@router.get('/all', name="All Links", description="In future I'm going to separate this method for admins and other users. Users will see history of shortened links.")
 async def get_all_links(
     limit: int,
     db: AsyncSession = Depends(get_session),
@@ -36,7 +36,7 @@ async def get_all_links(
     return res[:limit]
 
 
-@router.post('/')
+@router.post('/', name="Short Link", description="Creates token for short link and returns it.")
 async def post_short_link(
     long_link: LongLink,
     db: AsyncSession = Depends(get_session),
@@ -77,8 +77,8 @@ async def delete_link(
     return None
 
 
-@router.delete('/all', status_code=204)
-async def delete_all_links(
+@router.delete('/all', status_code=204, description="Deletes all links. Dangerous!")
+async def delete_links(
     db: AsyncSession = Depends(get_session),
 ):
     await links_crud.delete_links(db)
