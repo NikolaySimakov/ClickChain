@@ -1,10 +1,25 @@
 # API
 
+## Usage
+
+```
+$ cd server
+$ python src/app.py
+```
+
+## Requirements
+
+- alembic 1.8.1
+- fastapi 0.85.0
+- hashids 1.3.1
+- SQLAlchemy 1.4.41
+- uvicorn 0.18.3
+
 ## TODO
 
 - [x] Link endpoint
 - [ ] Statistics endpoint, clicks route
-- [ ] auth
+- [ ] Auth
 
 ## Project structure
 
@@ -20,9 +35,7 @@ app
 ├── db - db related stuff.
 │ ├── migrations - manually written alembic migrations.
 │ └── repositories - all crud stuff.
-├── models - pydantic models for this application.
-│ ├── domain - main models that are used almost everywhere.
-│ └── schemas - schemas for using in web routes.
+├── schemas - schemas for using in web routes.
 ├── resources - strings, enums, constants that are used in web responses.
 ├── services - logic that is not just crud related.
 └── main.py - FastAPI application creation and configuration.
