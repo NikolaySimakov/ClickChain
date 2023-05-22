@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import ValidationError
 from hashids import Hashids
@@ -27,11 +27,23 @@ async def get_long_link(
         return link.long_link
 
 
+@router.get('/all')
+async def get_all_links(
+    limit: int,
+    db: AsyncSession = Depends(get_session),
+):
+    res = await links_crud.get_links(db)
+    return res[:limit]
+
+
 @router.post('/')
 async def post_short_link(
     long_link: LongLink,
     db: AsyncSession = Depends(get_session),
 ):
+
+    # TODO: add start datetime and end datetime
+
     created_token = await links_crud.get_token(db, long_link)
 
     if bool(created_token):
@@ -55,6 +67,22 @@ async def post_short_link(
         except ValidationError as e:
             print(e)
 
+
+@router.delete('/', status_code=204)
+async def delete_link(
+    token: str | None = None,
+    db: AsyncSession = Depends(get_session),
+):
+    await links_crud.delete_link(db, token)
+    return None
+
+
+@router.delete('/all', status_code=204)
+async def delete_all_links(
+    db: AsyncSession = Depends(get_session),
+):
+    await links_crud.delete_links(db)
+    return None
 
 """
 @router.get('/{token}')

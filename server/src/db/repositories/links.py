@@ -30,6 +30,17 @@ async def create_link(session: AsyncSession, link: LinkBase):
         )
 
 
+async def get_links(session: AsyncSession):
+
+    try:
+        res = (await session.execute(select(Link))).scalars()
+        my_objects = res.fetchall()
+        return my_objects
+
+    except NoResultFound:
+        return None
+
+
 async def get_link(session: AsyncSession, token: str):
 
     try:
@@ -48,6 +59,26 @@ async def get_token(session: AsyncSession, long_link: LongLink) -> str | None:
 
     except NoResultFound:
         return None
+
+
+async def delete_link(session: AsyncSession, token: str):
+
+    result = await session.execute(select(Link).where(Link.token == token))
+    link = result.scalar_one()
+    await session.delete(link)
+    await session.commit()
+
+    # also delete all clicks related to this token
+
+
+async def delete_links(session: AsyncSession):
+
+    try:
+        await session.query(Link).delete()
+        await session.commit()
+    except:
+        pass
+
 
 """
 async def get_clicks(session: AsyncSession, token: str) -> ClicksBase:
