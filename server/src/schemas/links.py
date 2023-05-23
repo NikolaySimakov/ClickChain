@@ -36,6 +36,12 @@ class Link(LinkBase):
     activation_date: datetime
     deactivation_date: datetime
 
+    @validator('deactivation_date')
+    def deactivation_date_must_be_later(cls, v, values):
+        if 'activation_date' in values and v <= values['activation_date']:
+            raise ValueError(strings.WRONG_DEACTIVATION_DATE)
+        return v
+
     class Config:
         orm_mode = True
 
