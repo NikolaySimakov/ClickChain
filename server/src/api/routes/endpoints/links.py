@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import ValidationError
+from datetime import datetime, timedelta
 from hashids import Hashids
 
 from api.dependencies.database import get_session
 from db.repositories import links as links_crud
-from schemas.links import LinkBase, LongLink
+from schemas import Link, LongLink
 from resources import strings, constants
 
 router = APIRouter()
@@ -20,7 +21,7 @@ async def get_link(
 
     if not link:
         raise HTTPException(
-            status_code=404, detail=strings.LINK_DOES_NOT_EXIST
+            status_code=status.HTTP_404_NOT_FOUND, detail=strings.LINK_DOES_NOT_EXIST
         )
 
     else:
@@ -29,16 +30,17 @@ async def get_link(
 
 @router.get('/all', name="All Links", description="In future I'm going to separate this method for admins and other users. Users will see history of shortened links.")
 async def get_all_links(
-    limit: int,
+    limit: int | None = None,
     db: AsyncSession = Depends(get_session),
 ):
     res = await links_crud.get_links(db)
-    return res[:limit]
+    return res[:limit] if limit else res
 
 
-@router.post('/', name="Short Link", description="Creates token for short link and returns it.")
+@router.post('/', status_code=status.HTTP_201_CREATED, name="Short Link", description="Creates token for short link and returns it.")
 async def post_short_link(
     long_link: LongLink,
+    days: int = 1,
     db: AsyncSession = Depends(get_session),
 ):
 
@@ -57,10 +59,14 @@ async def post_short_link(
         # TODO: - Token validation (I'll make recursive method for it)
 
         try:
-            link_data = LinkBase(
+            link_data = Link(
                 token=token,
                 long_link=long_link.link,
+                activation_date=datetime.now(),
+                deactivation_date=datetime.now() + timedelta(days=days),
             )
+            
+            print(link_data)
 
             return await links_crud.create_link(db, link_data)
 
@@ -81,8 +87,7 @@ async def delete_link(
 async def delete_links(
     db: AsyncSession = Depends(get_session),
 ):
-    await links_crud.delete_links(db)
-    return None
+    return await links_crud.delete_links(db)
 
 """
 @router.get('/{token}')

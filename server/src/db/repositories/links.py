@@ -5,14 +5,15 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import delete
 
-from schemas import LinkBase, LongLink, ClicksBase
+import schemas
 from db.models import Link, Clicks
 from resources import strings
 
 
-async def create_link(session: AsyncSession, link: LinkBase):
+async def create_link(session: AsyncSession, link: schemas.Link):
 
-    new_link = Link(token=link.token, long_link=link.long_link)
+    new_link = Link(token=link.token, long_link=link.long_link,
+                    activation_date=link.activation_date, deactivation_date=link.deactivation_date)
     link_clicks = Clicks(link_token=link.token, clicks_count=0)
 
     session.add(new_link)
@@ -52,7 +53,7 @@ async def get_link(session: AsyncSession, token: str):
         return None
 
 
-async def get_token(session: AsyncSession, long_link: LongLink) -> str | None:
+async def get_token(session: AsyncSession, long_link: schemas.LongLink) -> str | None:
 
     try:
         q = (await session.execute(select(Link).where(Link.long_link == long_link.link))).scalars().one()
@@ -78,7 +79,7 @@ async def delete_links(session: AsyncSession):
     await session.execute(clicks)
     await session.execute(links)
     await session.commit()
-    return {"message": "All users have been deleted."}
+    return {"message": "All links have been deleted."}
 
 
 """

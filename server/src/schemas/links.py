@@ -33,6 +33,7 @@ class LinkBase(BaseModel):
 
 class Link(LinkBase):
 
+    activation_date: datetime
     deactivation_date: datetime
 
     class Config:
