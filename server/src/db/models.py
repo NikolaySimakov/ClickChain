@@ -28,14 +28,16 @@ class Link(Base):
 
 class Clicks(Base):
 
-    clicks_count = Column(Integer)
     link_token = Column(Text, ForeignKey('link.token'), primary_key=True)
+    user_ip = Column(String(15))
+    date = Column(DateTime)
 
     link = relationship("Link", back_populates="clicks")
 
-    def __init__(self, link_token: str, clicks_count: int):
+    def __init__(self, link_token: str, user_ip: str, date: datetime):
         self.link_token = link_token
-        self.clicks_count = clicks_count
+        self.user_ip = user_ip
+        self.date = date
 
     def __repr__(self):
-        return f'Clicks<clicks_count={self.clicks_count}>'
+        return f'Clicks<user_ip={self.user_ip}, date={self.date}>'
