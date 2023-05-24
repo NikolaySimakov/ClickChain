@@ -14,6 +14,7 @@ $ python src/app.py
 - hashids 1.3.1
 - SQLAlchemy 1.4.41
 - uvicorn 0.18.3
+- pytest 5.3.5
 
 ## TODO
 
@@ -23,10 +24,10 @@ $ python src/app.py
 
 ## Project structure
 
-Files related to application are in the `app` or `tests` directories. Application parts are:
+Files related to application are in the `src` or `tests` directories. Application parts are:
 
 ```
-app
+src
 ├── api - web related stuff.
 │ ├── dependencies - dependencies for routes definition.
 │ ├── errors - definition of error handlers.
