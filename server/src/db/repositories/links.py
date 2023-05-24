@@ -14,15 +14,12 @@ async def create_link(session: AsyncSession, link: schemas.Link):
 
     new_link = Link(token=link.token, long_link=link.long_link,
                     activation_date=link.activation_date, deactivation_date=link.deactivation_date)
-    link_clicks = Clicks(link_token=link.token, clicks_count=0)
 
     session.add(new_link)
-    session.add(link_clicks)
 
     try:
         await session.commit()
         await session.refresh(new_link)
-        await session.refresh(link_clicks)
         return new_link
 
     except IntegrityError:
@@ -79,24 +76,5 @@ async def delete_links(session: AsyncSession):
     await session.execute(clicks)
     await session.execute(links)
     await session.commit()
+
     return {"message": "All links have been deleted."}
-
-
-"""
-async def get_clicks(session: AsyncSession, token: str) -> ClicksBase:
-    q = await get_link(session, token)
-    return q.clicks
-
-
-async def update_clicks(session: AsyncSession, token: str):
-    clicks = await session.query(Clicks).filter(Clicks.link_token == token)
-    clicks.update({
-        'clicks_count': clicks.first().clicks_count + 1
-    })
-
-    try:
-        await session.commit()
-        return clicks
-    except:
-        return None
-"""
