@@ -14,7 +14,7 @@ class Link(Base):
     activation_date = Column(DateTime)
     deactivation_date = Column(DateTime)
 
-    clicks = relationship('Clicks', back_populates='link', uselist=False)
+    clicks = relationship("Click", back_populates="link")
 
     def __init__(self, token: str, long_link: str, activation_date: datetime, deactivation_date: datetime):
         self.token = token
@@ -26,9 +26,11 @@ class Link(Base):
         return f'Link<token={self.token}, long_link={self.long_link}, activation_date={self.activation_date}, deactivation_date={self.deactivation_date}>'
 
 
-class Clicks(Base):
+class Click(Base):
 
-    link_token = Column(Text, ForeignKey('link.token'), primary_key=True)
+    id = Column(Integer, index=True, primary_key=True, unique=True)
+    link_token = Column(String(LINK_TOKEN_MAX_LENGTH),
+                        ForeignKey('link.token'))
     user_ip = Column(String(15))
     date = Column(DateTime)
 

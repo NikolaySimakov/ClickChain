@@ -1,12 +1,11 @@
 from fastapi import HTTPException
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy import delete
 
 import schemas
-from db.models import Link, Clicks
+from db.models import Link, Click
 from resources import strings
 
 
@@ -72,7 +71,7 @@ async def delete_link(session: AsyncSession, token: str):
 
 async def delete_links(session: AsyncSession):
     links = delete(Link)
-    clicks = delete(Clicks)
+    clicks = delete(Click)
     await session.execute(clicks)
     await session.execute(links)
     await session.commit()

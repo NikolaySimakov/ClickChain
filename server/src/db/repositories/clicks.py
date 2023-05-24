@@ -5,14 +5,14 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 
 import schemas
-from db.models import Clicks
+from db.models import Click
 from resources import strings
 
 
 async def create_click(session: AsyncSession, click: schemas.Click):
 
-    new_click = Clicks(link_token=click.link_token,
-                       user_ip=click.user_ip, date=click.date)
+    new_click = Click(link_token=click.link_token,
+                      user_ip=click.user_ip, date=click.date)
 
     session.add(new_click)
 
@@ -30,7 +30,7 @@ async def create_click(session: AsyncSession, click: schemas.Click):
 
 async def read_clicks(session: AsyncSession, token: str):
     try:
-        result = await session.execute(select(Clicks).where(Clicks.link_token == token))
+        result = await session.execute(select(Click).where(Click.link_token == token))
         clicks = result.scalars().all()
         return clicks
 
