@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator, HttpUrl
+from pydantic import BaseModel, validator, constr, HttpUrl
 from datetime import datetime
 
 from resources import strings, constants
@@ -46,12 +46,15 @@ class Link(LinkBase):
         orm_mode = True
 
 
-# TODO: - Add to clicks schema user ip and datetime of click
-
-class ClicksBase(BaseModel):
+class Click(BaseModel):
 
     link_token: str
-    clicks_count: int
+    user_ip: str
+    date: datetime
+
+    @validator('user_ip')
+    def validate_user_ip(cls, v):
+        return constr(regex=r'^(\d{1,3}\.){3}\d{1,3}$|^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$')(v)
 
     class Config:
         orm_mode = True
