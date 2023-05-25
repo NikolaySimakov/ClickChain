@@ -3,29 +3,37 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api.dependencies.database import get_session
 from datetime import date
 
+from schemas import Click
+from db.repositories import clicks_crud
+
 router = APIRouter()
 
 
-@router.get('/', response_model=int)
-async def get_long_link(
-    token: str | None = None,
+@router.get('/{token}/clicks', response_model=list[Click] | int)
+async def get_clicks(
+    token: str,
+    count: bool = False,
     db: AsyncSession = Depends(get_session),
 ):
-    return 'ekj jenf;n j'
+    clicks = await clicks_crud.read_clicks(db, token)
+    if count:
+        return len(clicks)
+
+    return clicks
 
 
-@router.get('/date/{selected_date}')
+@router.get('/{token}/date/{selected_date}')
 async def get_statistics_by_date(
     selected_date: date,
-    token: str | None = None,
+    token: str,
     db: AsyncSession = Depends(get_session),
 ):
     return None
 
 
-@router.get('/locations')
+@router.get('/{token}/locations')
 async def get_locations(
-    token: str | None = None,
+    token: str,
     db: AsyncSession = Depends(get_session),
 ):
 
