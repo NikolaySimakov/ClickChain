@@ -17,14 +17,7 @@ async def get_clicks(
     count: bool = False,
     db: AsyncSession = Depends(get_session),
 ):
-    if period_start and period_end:
-        clicks = await clicks_crud.read_clicks_period(db, token, period_start, period_end)
-    elif period_start:
-        clicks = await clicks_crud.read_clicks_period_start_only(db, token, period_start)
-    elif period_end:
-        clicks = await clicks_crud.read_clicks_period_end_only(db, token, period_end)
-    else:
-        clicks = await clicks_crud.read_clicks(db, token)
+    clicks = await clicks_crud.read_clicks(db, token, period_start, period_end)
         
     if count:
         return len(clicks)

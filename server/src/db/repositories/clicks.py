@@ -29,52 +29,31 @@ async def create_click(session: AsyncSession, click: schemas.Click):
         )
 
 
-async def read_clicks(session: AsyncSession, token: str):
+async def read_clicks(session: AsyncSession, token: str, start_date: date=None, end_date: date=None) -> list[Click]:
+    
+    query_conditions = Click.link_token == token
+    
     try:
-        result = await session.execute(select(Click).where(Click.link_token == token))
+        if start_date and end_date:
+            assert start_date <= end_date
+            query_conditions = query_conditions & (Click.date >= start_date) & (Click.date <= end_date + timedelta(days=1))
+        elif start_date:
+            assert start_date <= date.today()
+            query_conditions = query_conditions & (Click.date >= start_date)
+        elif end_date:
+            assert end_date <= date.today()
+            query_conditions = query_conditions & (Click.date <= end_date + timedelta(days=1))
+    except:
+        raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=strings.CLICKS_UNPROCESSABLE_ENTITY
+            )
+    
+    try:
+        result = await session.execute(select(Click).where(query_conditions))
         clicks = result.scalars().all()
         return clicks
 
     except NoResultFound:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=strings.CLICKS_NOT_FOUND
-        )
-
-
-# when start date is not None
-async def read_clicks_period_start_only(session: AsyncSession, token: str, start_date: date) -> list[Click]:
-    try:
-        assert start_date <= date.today()
-        result = await session.execute(select(Click).where((Click.date >= start_date) & (Click.link_token == token)))
-        clicks = result.scalars().all()
-        return clicks
-    except:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=strings.CLICKS_NOT_FOUND_BY_PERIOD
-        )
-
-
-# when end date is not None
-async def read_clicks_period_end_only(session: AsyncSession, token: str, end_date: date) -> list[Click]:
-    try:
-        assert end_date <= date.today()
-        result = await session.execute(select(Click).where((Click.date <= end_date + timedelta(days=1)) & (Click.link_token == token)))
-        clicks = result.scalars().all()
-        return clicks
-    except:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=strings.CLICKS_NOT_FOUND_BY_PERIOD
-        )
-
-
-# when start and end date are not None
-async def read_clicks_period(session: AsyncSession, token: str, start_date: date, end_date: date) -> list[Click]:
-    try:
-        assert start_date <= end_date
-        result = await session.execute(select(Click).where((Click.date >= start_date) & (Click.date <= end_date + timedelta(days=1)) & (Click.link_token == token)))
-        clicks = result.scalars().all()
-        return clicks
-    except:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=strings.CLICKS_NOT_FOUND_BY_PERIOD
         )
