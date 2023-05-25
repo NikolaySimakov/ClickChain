@@ -36,13 +36,13 @@ async def read_clicks(session: AsyncSession, token: str, start_date: date=None, 
     try:
         if start_date and end_date:
             assert start_date <= end_date
-            query_conditions = query_conditions & (Click.date >= start_date) & (Click.date <= end_date + timedelta(days=1))
+            query_conditions &= (Click.date >= start_date) & (Click.date <= end_date + timedelta(days=1))
         elif start_date:
             assert start_date <= date.today()
-            query_conditions = query_conditions & (Click.date >= start_date)
+            query_conditions &= (Click.date >= start_date)
         elif end_date:
             assert end_date <= date.today()
-            query_conditions = query_conditions & (Click.date <= end_date + timedelta(days=1))
+            query_conditions &= (Click.date <= end_date + timedelta(days=1))
     except:
         raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=strings.CLICKS_UNPROCESSABLE_ENTITY
