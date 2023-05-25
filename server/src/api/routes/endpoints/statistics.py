@@ -12,10 +12,20 @@ router = APIRouter()
 @router.get('/{token}/clicks', response_model=list[Click] | int)
 async def get_clicks(
     token: str,
+    period_start: date = None,
+    period_end: date = date.today(),
     count: bool = False,
     db: AsyncSession = Depends(get_session),
 ):
-    clicks = await clicks_crud.read_clicks(db, token)
+    if period_start and period_end:
+        clicks = await clicks_crud.read_clicks_period(db, token, period_start, period_end)
+    elif period_start:
+        clicks = await clicks_crud.read_clicks_period_start_only(db, token, period_start)
+    elif period_end:
+        clicks = await clicks_crud.read_clicks_period_end_only(db, token, period_end)
+    else:
+        clicks = await clicks_crud.read_clicks(db, token)
+        
     if count:
         return len(clicks)
 

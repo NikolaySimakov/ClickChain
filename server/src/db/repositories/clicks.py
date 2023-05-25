@@ -3,6 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
+from datetime import date, timedelta
 
 import schemas
 from db.models import Click
@@ -37,4 +38,43 @@ async def read_clicks(session: AsyncSession, token: str):
     except NoResultFound:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=strings.CLICKS_NOT_FOUND
+        )
+
+
+# when start date is not None
+async def read_clicks_period_start_only(session: AsyncSession, token: str, start_date: date) -> list[Click]:
+    try:
+        assert start_date <= date.today()
+        result = await session.execute(select(Click).where((Click.date >= start_date) & (Click.link_token == token)))
+        clicks = result.scalars().all()
+        return clicks
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=strings.CLICKS_NOT_FOUND_BY_PERIOD
+        )
+
+
+# when end date is not None
+async def read_clicks_period_end_only(session: AsyncSession, token: str, end_date: date) -> list[Click]:
+    try:
+        assert end_date <= date.today()
+        result = await session.execute(select(Click).where((Click.date <= end_date + timedelta(days=1)) & (Click.link_token == token)))
+        clicks = result.scalars().all()
+        return clicks
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=strings.CLICKS_NOT_FOUND_BY_PERIOD
+        )
+
+
+# when start and end date are not None
+async def read_clicks_period(session: AsyncSession, token: str, start_date: date, end_date: date) -> list[Click]:
+    try:
+        assert start_date <= end_date
+        result = await session.execute(select(Click).where((Click.date >= start_date) & (Click.date <= end_date + timedelta(days=1)) & (Click.link_token == token)))
+        clicks = result.scalars().all()
+        return clicks
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=strings.CLICKS_NOT_FOUND_BY_PERIOD
         )
