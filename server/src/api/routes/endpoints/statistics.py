@@ -10,7 +10,7 @@ from resources.enums import ClickStatistics
 router = APIRouter()
 
 
-@router.get('/{token}/clicks', response_model=list[Click] | int)
+@router.get('/{token}/clicks', response_model=list[Click] | float | int)
 async def get_clicks(
     token: str,
     period_start: date = None,
@@ -24,9 +24,10 @@ async def get_clicks(
     if additional_settings == ClickStatistics.COUNT:
         return count
     elif additional_settings == ClickStatistics.AVERAGE:
-        days = (period_end - period_start).days
-        return count/days
-    
+        if period_end and period_start:
+            days = (period_end - period_start).days + 1
+            return round(count/days, 2)
+        return round(count/7, 2) # default calculate clicks per week
     return clicks
 
 
