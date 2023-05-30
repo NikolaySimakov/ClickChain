@@ -1,9 +1,11 @@
 <script setup>
 import LinkForm from "../components/LinkForm.vue";
 import LinkCard from "../components/LinkCard.vue";
+import Navbar from "../components/Navbar.vue";
 </script>
 
 <template>
+  <Navbar />
   <div class="grid h-screen place-items-center">
     <LinkForm />
   </div>
