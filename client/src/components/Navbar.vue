@@ -11,12 +11,14 @@
         <button
           type="button"
           class="font-bold border-4 border-black text-black bg-white font-medium text-lg px-4 py-2 text-center mr-2"
+          @click="$router.push('signin')"
         >
           Sign In
         </button>
         <button
           type="button"
-          class="font-bold border-4 border-black text-black bg-white hover:bg-emerald-300 hover:text-white font-medium text-lg px-4 py-2 text-center mr-3 ml-2"
+          class="font-bold border-4 border-black text-black bg-white font-medium text-lg px-4 py-2 text-center mr-3 ml-2"
+          @click="$router.push('login')"
         >
           Login
         </button>
