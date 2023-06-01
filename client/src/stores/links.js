@@ -6,11 +6,15 @@ export const useLinkStore = defineStore('links', {
 
     state: () => ({
         token: '',
+        links: [],
     }),
 
     getters: {
         getShortLink(state) {
             return CONFIG.DOMAIN + state.token;
+        },
+        getHistory(state) {
+            return state.links;
         },
     },
 
@@ -19,6 +23,13 @@ export const useLinkStore = defineStore('links', {
             const response = await api.post('/links/', { params: { link: longLink }})
             if (!!response.data) {
                 this.token = response.data
+            }
+        },
+
+        async getLinksHistory() {
+            const response = await api.query('/links/')
+            if (!!response.data) {
+                this.links = response.data;
             }
         },
     },
