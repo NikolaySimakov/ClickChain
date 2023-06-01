@@ -16,7 +16,9 @@ onMounted(async () => {
   store
     .getLongLink(token)
     .then(() => {
-      window.location.href = store.longLink;
+      store.addClick(token).then(() => {
+        window.location.href = store.longLink;
+      });
     })
     .catch(() => {
       linkNotFound.value = true;
