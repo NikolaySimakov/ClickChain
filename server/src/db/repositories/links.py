@@ -31,9 +31,9 @@ async def create_token(session: AsyncSession, link: schemas.Link):
 async def get_links(session: AsyncSession):
 
     try:
-        res = (await session.execute(select(Link))).scalars()
-        my_objects = res.fetchall()
-        return my_objects
+        res = await session.execute(select(Link).order_by(Link.activation_date.desc()))
+        links = res.scalars().all()
+        return links
 
     except NoResultFound:
         return None
