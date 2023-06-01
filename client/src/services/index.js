@@ -1,6 +1,12 @@
 import { CONFIG } from '../config';
 import ApiService from './api';
+import userInfo from './userInfo';
 
-export const api = new ApiService({
+const api = new ApiService({
     baseUrl: CONFIG.API_HOST,
 });
+
+export {
+    api,
+    userInfo,
+}
