@@ -30,7 +30,13 @@ export const useLinkStore = defineStore('links', {
             const response = await api.query('/links/')
             if (!!response.data) {
                 this.links = response.data;
+                this.links.forEach(link => {
+                    api.query('/statistics/' + link.token + '/clicks', { params : { additional_settings : 'count' }}).then(resp => {
+                        Object.assign(link, { clicks: resp.data })
+                    })
+                })
             }
         },
+
     },
 })

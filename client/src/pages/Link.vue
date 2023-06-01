@@ -32,6 +32,7 @@ onMounted(async () => {
           :token="link.token"
           :longLink="link.long_link"
           :date="link.activation_date"
+          :clicks="link.clicks"
         />
       </div>
     </div>
