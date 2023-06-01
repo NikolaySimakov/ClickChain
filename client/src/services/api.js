@@ -11,19 +11,27 @@ class ApiService {
     }
 
     async query(resource, params) {
-        return await axios.get(`${resource}`, params);
+        try {
+            return await axios.get(`${resource}`, params);
+        } catch (error) {
+            throw new Error(`ApiService ${error}`);
+        }
     }
 
     async get(resource, slug = "") {
         try {
             return await axios.get(`${resource}/${slug}`);
         } catch (error) {
-            throw new Error(`[RWV] ApiService ${error}`);
+            throw new Error(`ApiService ${error}`);
         }
     }
 
     async post(resource, params) {
-        return await axios.post(`${resource}`, params);
+        try {
+            return await axios.post(resource, null, params);
+        } catch (error) {
+            throw new Error(`ApiService ${error}`);
+        }
     }
 
     update(resource, slug, params) {

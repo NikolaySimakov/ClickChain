@@ -9,7 +9,7 @@ export const useRedirectStore = defineStore('redirect', {
 
     actions: {
         async getLongLink(token) {
-            const response = await api.query('/links/', { params: { token: token } })
+            const response = await api.query('/links/' + token, { params: { only_link: true } })
             this.longLink = response.data
         },
     }
