@@ -1,1 +1,1 @@
-from .links import LongLink, Link, LinkBase, Click
+from .links import Link, LinkBase, Click

@@ -4,16 +4,6 @@ from datetime import datetime
 from resources import strings, constants
 
 
-class LongLink(BaseModel):
-
-    link: HttpUrl
-
-    class Config:
-        schema_extra = {
-            "link": "https://your.very/long?q=link/jnknK%WBKbWK#Fwjbkf%kjf#bkjwekjDBWE#KBJw#kd%wjb"
-        }
-
-
 class LinkBase(BaseModel):
 
     token: str

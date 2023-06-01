@@ -5,7 +5,7 @@ from hashids import Hashids
 
 from api.dependencies.database import get_session
 from db.repositories import links_crud, clicks_crud
-from schemas import Link, LongLink, Click
+from schemas import Link, Click
 from resources import strings, constants
 
 router = APIRouter()
@@ -29,30 +29,31 @@ async def get_all_links(
 
 @router.post(
     '/',
+    response_model=str,
     status_code=status.HTTP_201_CREATED,
     name="Short Link",
     description="Creates token for short link and returns it."
 )
 async def post_short_link(
-    long_link: LongLink,
+    link: str,
     days: int = 1,
     db: AsyncSession = Depends(get_session),
 ):
-    if created_token := await links_crud.get_token(db, long_link):
+    if created_token := await links_crud.get_token(db, link):
         return created_token
     else:
-        hashids = Hashids(salt=long_link.link,
+        hashids = Hashids(salt=link,
                           min_length=constants.LINK_TOKEN_MIN_LENGTH)
         token = hashids.encode(constants.LINK_TOKEN_ENCODE_DATA)
 
         link_data = Link(
             token=token,
-            long_link=long_link.link,
+            long_link=link,
             activation_date=datetime.now(),
             deactivation_date=datetime.now() + timedelta(days=days),
         )
 
-        return await links_crud.create_link(db, link_data)
+        return await links_crud.create_token(db, link_data)
 
 
 @router.delete(

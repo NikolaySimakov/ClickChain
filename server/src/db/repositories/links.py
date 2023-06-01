@@ -9,7 +9,7 @@ from db.models import Link, Click
 from resources import strings
 
 
-async def create_link(session: AsyncSession, link: schemas.Link):
+async def create_token(session: AsyncSession, link: schemas.Link):
 
     new_link = Link(token=link.token, long_link=link.long_link,
                     activation_date=link.activation_date, deactivation_date=link.deactivation_date)
@@ -19,7 +19,7 @@ async def create_link(session: AsyncSession, link: schemas.Link):
     try:
         await session.commit()
         await session.refresh(new_link)
-        return new_link
+        return link.token
 
     except IntegrityError:
         await session.rollback()
@@ -49,10 +49,10 @@ async def get_link(session: AsyncSession, token: str):
         return None
 
 
-async def get_token(session: AsyncSession, long_link: schemas.LongLink) -> str | None:
+async def get_token(session: AsyncSession, link: str) -> str | None:
 
     try:
-        q = (await session.execute(select(Link).where(Link.long_link == long_link.link))).scalars().one()
+        q = (await session.execute(select(Link).where(Link.long_link == link))).scalars().one()
         return q.token
 
     except NoResultFound:
