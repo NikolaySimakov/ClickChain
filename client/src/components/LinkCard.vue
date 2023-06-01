@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { CONFIG } from "../config";
 import QRCode from "qrcode";
 
 const qrcode = ref(null);
@@ -12,8 +13,18 @@ const props = defineProps({
 });
 
 const shortLink = computed(() => {
-  return "http://127.0.0.1:5173/" + props.token;
+  return CONFIG.DOMAIN + props.token;
 });
+
+const dateFormatter = (d) => {
+  const date = new Date(d);
+  const formattedDate = date.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  return formattedDate;
+};
 
 function generateQRCode() {
   QRCode.toCanvas(qrcode.value, "shortLink.value");
@@ -36,7 +47,7 @@ onMounted(() => {
         <div class="flex-initial w-96 mx-4">
           <div class="font-bold">{{ shortLink }}</div>
           <div class="my-3 text-gray-400">{{ props.longLink }}</div>
-          <div class="text-gray-400">{{ props.date }}</div>
+          <div class="text-gray-400">{{ dateFormatter(props.date) }}</div>
         </div>
         <div class="flex-initial w-32 relative">
           <div class="absolute right-0 bottom-0">
