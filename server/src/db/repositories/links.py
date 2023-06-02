@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
@@ -75,12 +75,16 @@ async def update_link_deactivation_date(session: AsyncSession, token: str, durat
 
 async def delete_link(session: AsyncSession, token: str):
 
-    result = await session.execute(select(Link).where(Link.token == token))
-    link = result.scalar_one()
-    await session.delete(link)
-    await session.commit()
-
-    # also delete all clicks related to this token
+    try:
+        result = await session.execute(select(Link).where(Link.token == token))
+        link = result.scalar_one()
+        await session.execute(delete(Click).where(Click.link_token == token))
+        await session.delete(link)
+        await session.commit()
+        return {"message": "Link deleted successfully"}
+    
+    except NoResultFound:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=strings.LINK_DOES_NOT_EXIST)
 
 
 async def delete_links(session: AsyncSession):
