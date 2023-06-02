@@ -116,16 +116,3 @@ async def delete_link(
 ):
     await links_crud.delete_link(db, token)
     return None
-
-
-@router.get('/{token}/clicks', response_model=list[Click], status_code=status.HTTP_200_OK)
-async def get_link_clicks(
-    token: str,
-    db: AsyncSession = Depends(get_session),
-):
-    if (clicks := await clicks_crud.read_clicks(db, token)) != None:
-        return clicks
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=strings.LINK_DOES_NOT_EXIST
-        )
