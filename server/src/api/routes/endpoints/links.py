@@ -100,6 +100,15 @@ async def post_click(
     return await clicks_crud.create_click(db, click_data)
 
 
+@router.put('/{token}')
+async def update_link_deactivation_date(
+    token: str,
+    duration: int,
+    db: AsyncSession = Depends(get_session),
+):
+    return await links_crud.update_link_deactivation_date(db, token, duration)
+
+
 @router.delete('/{token}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_link(
     token: str,

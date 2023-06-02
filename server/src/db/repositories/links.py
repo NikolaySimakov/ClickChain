@@ -7,6 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 import schemas
 from db.models import Link, Click
 from resources import strings
+from datetime import timedelta
 
 
 async def create_token(session: AsyncSession, link: schemas.Link):
@@ -55,6 +56,19 @@ async def get_token(session: AsyncSession, link: str) -> str | None:
         q = (await session.execute(select(Link).where(Link.long_link == link))).scalars().one()
         return q.token
 
+    except NoResultFound:
+        return None
+    
+
+async def update_link_deactivation_date(session: AsyncSession, token: str, duration: int):
+    try:
+        data = await session.execute(select(Link).where(Link.token == token))
+        link = data.scalars().one()
+        link.deactivation_date = link.activation_date + timedelta(days=duration)
+        await session.commit()
+        await session.refresh(link)
+        return {"message": "Link deactivation date was successfully updated."}
+    
     except NoResultFound:
         return None
 
