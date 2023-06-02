@@ -29,25 +29,20 @@ async def create_token(session: AsyncSession, link: schemas.Link):
         )
 
 
-async def get_links(session: AsyncSession):
+async def get_links(session: AsyncSession, token: str=None):
 
     try:
-        res = await session.execute(select(Link).order_by(Link.activation_date.desc()))
-        links = res.scalars().all()
-        return links
+        if token:
+            data = await session.execute(select(Link).where(Link.token == token))
+            link = data.scalars().one()
+            return link
+        else:
+            data = await session.execute(select(Link).order_by(Link.activation_date.desc()))
+            links = data.scalars().all()
+            return links
 
     except NoResultFound:
-        return None
-
-
-async def get_link(session: AsyncSession, token: str):
-
-    try:
-        q = (await session.execute(select(Link).where(Link.token == token))).scalars().one()
-        return q
-
-    except NoResultFound:
-        return None
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=strings.LINK_DOES_NOT_EXIST)
 
 
 async def get_token(session: AsyncSession, link: str) -> str | None:

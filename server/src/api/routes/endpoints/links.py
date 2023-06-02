@@ -74,7 +74,7 @@ async def get_link(
     only_link: bool = False,
     db: AsyncSession = Depends(get_session),
 ):
-    if link := await links_crud.get_link(db, token):
+    if link := await links_crud.get_links(db, token):
         if only_link:
             return link.long_link  # returns orignal link
         return link  # returns all link data
