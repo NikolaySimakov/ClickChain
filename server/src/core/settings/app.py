@@ -4,10 +4,19 @@ from typing import Any, Dict, List, Tuple
 from .base import BaseAppSettings
 from pydantic import PostgresDsn
 
+import sys
+import os
+
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(os.path.dirname(os.path.dirname(current)))
+sys.path.append(parent)
+
+from config import DATABASE_URL, SECRET_KEY, DEBUG, ALLOWED_HOSTS
+
 
 class AppSettings(BaseAppSettings):
 
-    debug: bool
+    debug: bool = DEBUG
     docs_url: str = "/"
     openapi_prefix: str = ""
     openapi_url: str = "/openapi.json"
@@ -15,16 +24,16 @@ class AppSettings(BaseAppSettings):
     title: str = 'Link Shortener'
     version: str = '0.0.1'
 
-    secret_key: str
+    secret_key: str = SECRET_KEY
 
     api_prefix: str = "/api/v1"
 
-    allowed_hosts: List[str] = ['127.0.0.1:5173', 'localhost:5173']
+    allow_origins: List[str] = ALLOWED_HOSTS
 
     logging_level: int = logging.INFO
     loggers: Tuple[str, str] = ("uvicorn.asgi", "uvicorn.access")
 
-    database_url: PostgresDsn
+    database_url: PostgresDsn = DATABASE_URL
     min_connection_count: int = 5
     max_connection_count: int = 10
 
