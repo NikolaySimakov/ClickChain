@@ -1,8 +1,8 @@
-# API
+# Link Shortener API
 
 ## Usage
 
-Rename `.env.example` to `.env` and paste database url.
+Rename `.env.example` to `.env` and change variables.
 
 ```
 $ cd server
@@ -12,7 +12,7 @@ $ python src/app.py
 To create migrations folder:
 
 ```
-alembic init -t async migrations
+$ alembic init -t async migrations
 ```
 
 ## Requirements
