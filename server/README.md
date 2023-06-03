@@ -2,9 +2,17 @@
 
 ## Usage
 
+Rename `.env.example` to `.env` and paste database url.
+
 ```
 $ cd server
 $ python src/app.py
+```
+
+To create migrations folder:
+
+```
+alembic init -t async migrations
 ```
 
 ## Requirements
@@ -19,7 +27,8 @@ $ python src/app.py
 ## TODO
 
 - [x] Link endpoint
-- [ ] Statistics endpoint, clicks route
+- [x] Statistics endpoint, clicks route
+- [ ] Basic statistics
 - [ ] Auth
 
 ## Project structure
