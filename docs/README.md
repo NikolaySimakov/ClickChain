@@ -8,4 +8,4 @@ Web application for creating shortened links and collecting click-through statis
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2018-present, komo
+Copyright (c) 2023-present, Hagai
