@@ -8,20 +8,18 @@
         <div class="ml-3">Link Shortener</div>
       </router-link>
       <div class="flex md:order-2">
-        <button
-          type="button"
+        <router-link
+          to="signin"
           class="font-bold border-4 border-black text-black bg-white font-medium text-lg px-4 py-2 text-center mr-2"
-          @click="$router.push('signin')"
         >
           Sign In
-        </button>
-        <button
-          type="button"
+        </router-link>
+        <router-link
+          to="signup"
           class="font-bold border-4 border-black text-black bg-white font-medium text-lg px-4 py-2 text-center mr-3 ml-2"
-          @click="$router.push('login')"
         >
-          Login
-        </button>
+          Sign Up
+        </router-link>
       </div>
     </div>
   </nav>
