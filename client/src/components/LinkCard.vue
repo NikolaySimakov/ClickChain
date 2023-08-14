@@ -27,7 +27,7 @@ const dateFormatter = (d) => {
 };
 
 function generateQRCode() {
-  QRCode.toCanvas(qrcode.value, "shortLink.value");
+  QRCode.toCanvas(qrcode.value, shortLink.value);
 }
 
 onMounted(() => {
