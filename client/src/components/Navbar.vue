@@ -9,16 +9,22 @@
       </router-link>
       <div class="flex md:order-2">
         <router-link
-          to="signin"
-          class="font-bold border-4 border-black text-black bg-white font-medium text-lg px-4 py-2 text-center mr-2"
+          to="/signin"
+          class="group relative font-bold border-4 border-black text-black bg-white font-medium text-lg px-4 py-2 text-center mr-2"
         >
-          Sign In
+          <div
+            class="absolute inset-0 w-0 bg-purple-500 transition-all duration-[250ms] ease-out group-hover:w-full"
+          ></div>
+          <span class="relative text-black group-hover:text-white">Sign In</span>
         </router-link>
         <router-link
-          to="signup"
-          class="font-bold border-4 border-black text-black bg-white font-medium text-lg px-4 py-2 text-center mr-3 ml-2"
+          to="/signup"
+          class="group relative font-bold border-4 border-black text-black bg-white font-medium text-lg px-4 py-2 text-center mr-2"
         >
-          Sign Up
+          <div
+            class="absolute inset-0 w-0 bg-purple-500 transition-all duration-[250ms] ease-out group-hover:w-full"
+          ></div>
+          <span class="relative text-black group-hover:text-white">Sign Up</span>
         </router-link>
       </div>
     </div>
