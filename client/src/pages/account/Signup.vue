@@ -9,14 +9,14 @@
         <div class="flex items-center justify-start space-x-3"></div>
         <div class="space-y-5">
           <h1 class="lg:text-3xl xl:text-5xl xl:leading-snug font-extrabold">
-            Enter your account and create short links!
+            Create your account and use Link Shortener
           </h1>
-          <p class="text-lg">You do not have an account?</p>
+          <p class="text-lg">Do you have an account?</p>
           <router-link
-            to="signup"
+            to="/signin"
             class="inline-block flex-none px-4 py-3 border-4 font-medium border-black bg-black text-white"
           >
-            Create account here
+            Sign in here
           </router-link>
         </div>
         <p class="font-medium">© 2023 Hagai</p>
@@ -33,17 +33,17 @@
             <div>Link Shortener</div>
           </router-link>
           <div class="flex items-center space-x-2">
-            <span>Not a member? </span>
-            <router-link to="signup" class="font-medium text-purple-600">
-              Sign up now
+            <span>Already have account? </span>
+            <router-link to="signin" class="font-medium text-purple-600">
+              Sign in
             </router-link>
           </div>
         </div>
         <!-- Login box -->
         <div class="flex flex-1 flex-col justify-center space-y-5 max-w-md">
           <div class="flex flex-col space-y-2 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold">Sign in to account</h2>
-            <p class="text-md md:text-xl">Sign in or log in</p>
+            <h2 class="text-3xl md:text-4xl font-bold">Sign up to account</h2>
+            <p class="text-md md:text-xl">Create your account</p>
           </div>
           <div class="flex flex-col max-w-md space-y-5">
             <input
@@ -56,10 +56,15 @@
               placeholder="Password"
               class="flex px-3 py-2 md:px-4 md:py-3 border-4 border-black font-medium placeholder:font-normal"
             />
+            <input
+              type="password"
+              placeholder="Password (again)"
+              class="flex px-3 py-2 md:px-4 md:py-3 border-4 border-black font-medium placeholder:font-normal"
+            />
             <button
               class="flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 font-medium border-black bg-black text-white"
             >
-              Sign In
+              Sign Up
             </button>
             <div class="flex justify-center items-center">
               <span class="w-full border border-black"></span>
@@ -95,7 +100,7 @@
                   />
                 </svg>
               </span>
-              <span>Sign in with Google</span>
+              <span>Sign up with Google</span>
             </button>
           </div>
         </div>
