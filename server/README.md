@@ -1,8 +1,12 @@
-# Link Shortener API
+# Server
+
+Link shortener api written in FastAPI.
 
 ## Usage
 
 Rename `.env.example` to `.env` and change variables.
+
+Run app:
 
 ```
 $ cd server
