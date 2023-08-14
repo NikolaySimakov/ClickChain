@@ -37,7 +37,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="border-4 border-black bg-white w-full my-4 transition duration-500 hover:scale-105 p-4 overflow-hidden"
+    class="border-4 border-black bg-white w-full my-4 md:transition md:duration-500 md:hover:scale-105 p-4 overflow-hidden"
   >
     <router-link :to="'/' + token + '/detail'">
       <div class="flex items-center justify-center">
