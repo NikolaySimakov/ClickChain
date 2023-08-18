@@ -23,14 +23,16 @@ onMounted(async () => {
 
 <template>
   <Navbar />
-  <div class="grid h-screen place-items-center mt-28">
-    <div class="text-purple-500 text-5xl font-bold">Create Short Links!</div>
-    <div class="text-xl text-center my-8">
-      <div>Web application for creating shortened links and collecting</div>
-      <div>click-through statistics</div>
+  <div class="grid h-screen place-items-center">
+    <div class="w-full text-center">
+      <div class="text-purple-500 text-5xl font-bold">Create Short Links!</div>
+      <div class="text-xl text-center my-8">
+        <div>Web application for creating shortened links and collecting</div>
+        <div>click-through statistics</div>
+      </div>
+      <LinkForm />
     </div>
-    <LinkForm />
-    <div class="w-2/3 xl:w-1/2 mx-auto mt-16" v-show="linksHistory.length !== 0">
+    <div class="w-2/3 xl:w-1/2 mx-auto mt-16" v-if="linksHistory.length !== 0">
       <div class="text-lg">Links history</div>
       <div v-for="link in linksHistory" :key="link">
         <LinkCard
