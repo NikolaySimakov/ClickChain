@@ -2,6 +2,8 @@
 
 Link shortener api written in FastAPI.
 
+https://link-shortener-eight-mauve.vercel.app
+
 ## Usage
 
 Rename `.env.example` to `.env` and change variables.
