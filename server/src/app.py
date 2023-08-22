@@ -36,6 +36,4 @@ def get_application() -> FastAPI:
 
 
 if __name__ == '__main__':
-
     app = get_application()
-    uvicorn.run(app, host="localhost", port=3002)
