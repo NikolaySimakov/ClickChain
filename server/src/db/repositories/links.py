@@ -4,17 +4,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
-import schemas
-from db.models import Link, Click
-from resources import strings
+from ... import schemas
+from ..models import Link, Click
+from ...resources import strings
 from datetime import timedelta
 
 
 async def create_token(session: AsyncSession, link: schemas.Link):
 
-    new_link = Link(token=link.token, long_link=link.long_link,
-                    activation_date=link.activation_date, deactivation_date=link.deactivation_date)
-
+    new_link = Link(
+        token=link.token, 
+        long_link=str(link.long_link),
+        activation_date=link.activation_date, 
+        deactivation_date=link.deactivation_date
+    )
     session.add(new_link)
 
     try:

@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 
 from .base import Base
-from resources.constants import LINK_TOKEN_MAX_LENGTH
+from ..resources.constants import LINK_TOKEN_MAX_LENGTH
 
 
 class Link(Base):

@@ -1,7 +1,7 @@
 from pydantic import BaseModel, validator, constr, HttpUrl
 from datetime import datetime
 
-from resources import strings, constants
+from ..resources import strings, constants
 
 
 class LinkBase(BaseModel):

@@ -5,9 +5,9 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
 from datetime import date, timedelta
 
-import schemas
-from db.models import Click
-from resources import strings
+from ... import schemas
+from ..models import Click
+from ...resources import strings
 
 
 async def create_click(session: AsyncSession, click: schemas.Click):

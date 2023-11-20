@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from api.dependencies.database import get_session
 from datetime import date
 
-from schemas import Click
-from db.repositories import clicks_crud
-from resources.enums import ClickStatistics
+from ....schemas import Click
+from ....db.repositories import clicks_crud
+from ....resources.enums import ClickStatistics
+from ...dependencies.database import get_session
 
 router = APIRouter()
 

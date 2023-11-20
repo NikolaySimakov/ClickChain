@@ -6,27 +6,32 @@ Link shortener api written in FastAPI.
 
 Rename `.env.example` to `.env` and change variables.
 
-Run app:
+### Run app:
 
+Install deps:
+
+```bash
+pip install -r requirements.txt
 ```
-$ cd server
-$ python src/app.py
+
+Update migrations:
+
+```bash
+alembic upgrade +1
+```
+
+Run app manually:
+
+```bash
+cd server
+python src/app.py
 ```
 
 To create migrations folder:
 
+```bash
+alembic init -t async migrations
 ```
-$ alembic init -t async migrations
-```
-
-## Requirements
-
-- alembic 1.8.1
-- fastapi 0.85.0
-- hashids 1.3.1
-- SQLAlchemy 1.4.41
-- uvicorn 0.18.3
-- pytest 5.3.5
 
 ## TODO
 
@@ -39,7 +44,7 @@ $ alembic init -t async migrations
 
 Files related to application are in the `src` or `tests` directories. Application parts are:
 
-```
+```md
 src
 ├── api - web related stuff.
 │ ├── dependencies - dependencies for routes definition.

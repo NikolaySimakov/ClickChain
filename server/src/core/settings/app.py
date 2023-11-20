@@ -1,22 +1,16 @@
 import logging
 from typing import Any, Dict, List, Tuple
 
-from .base import BaseAppSettings
-from pydantic import PostgresDsn
+from pydantic_settings import BaseSettings
+from pydantic import Field, PostgresDsn
+from dotenv import load_dotenv, find_dotenv
 
-import sys
-import os
-
-current = os.path.dirname(os.path.realpath(__file__))
-parent = os.path.dirname(os.path.dirname(os.path.dirname(current)))
-sys.path.append(parent)
-
-from config import DATABASE_URL, SECRET_KEY, DEBUG, ALLOWED_HOSTS
+load_dotenv(find_dotenv(".env"))
 
 
-class AppSettings(BaseAppSettings):
+class AppSettings(BaseSettings):
 
-    debug: bool = DEBUG
+    debug: bool = Field(alias='DEBUG')
     docs_url: str = "/"
     openapi_prefix: str = ""
     openapi_url: str = "/openapi.json"
@@ -24,16 +18,16 @@ class AppSettings(BaseAppSettings):
     title: str = 'Link Shortener'
     version: str = '0.0.1'
 
-    secret_key: str = SECRET_KEY
+    secret_key: str = Field(alias='SECRET_KEY')
 
     api_prefix: str = "/api/v1"
 
-    allow_origins: List[str] = ALLOWED_HOSTS
+    allow_origins: List[str] = Field(alias='ALLOWED_HOSTS')
 
     logging_level: int = logging.INFO
     loggers: Tuple[str, str] = ("uvicorn.asgi", "uvicorn.access")
 
-    database_url: PostgresDsn = DATABASE_URL
+    database_url: str = Field(alias='DATABASE_URL')
     min_connection_count: int = 5
     max_connection_count: int = 10
 

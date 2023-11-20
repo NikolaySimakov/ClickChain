@@ -3,10 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
 from hashids import Hashids
 
-from api.dependencies.database import get_session
-from db.repositories import links_crud, clicks_crud
-from schemas import Link, Click
-from resources import strings, constants
+from ...dependencies.database import get_session
+from ....db.repositories import links_crud, clicks_crud
+from ....schemas import Link, Click
+from ....resources import strings, constants
 
 router = APIRouter()
 
@@ -29,7 +29,6 @@ async def get_all_links(
 
 @router.post(
     '/',
-    response_model=str,
     status_code=status.HTTP_201_CREATED,
     name="Short Link",
     description="Creates token for short link and returns it."
@@ -38,12 +37,14 @@ async def post_short_link(
     link: str,
     days: int = 1,
     db: AsyncSession = Depends(get_session),
-):
+) -> str:
     if created_token := await links_crud.get_token(db, link):
         return created_token
     else:
-        hashids = Hashids(salt=link,
-                          min_length=constants.LINK_TOKEN_MIN_LENGTH)
+        hashids = Hashids(
+            salt=link,
+            min_length=constants.LINK_TOKEN_MIN_LENGTH
+        )
         token = hashids.encode(constants.LINK_TOKEN_ENCODE_DATA)
 
         link_data = Link(
